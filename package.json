@@ -8,7 +8,7 @@
     "glslify-deps": "^1.3.2"
   },
   "scripts": {
-    "sketch:mesh": "parcel index-mesh.html",
-    "sketch:particles": "parcel index-particles.html"
+    "basic": "parcel basic/index.html",
+    "particles": "parcel particles/index.html"
   }
 }
