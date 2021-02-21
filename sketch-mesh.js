@@ -2,11 +2,8 @@ import "./style.css"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import * as dat from "dat.gui"
-// import vertexShader from "./shaders/shader.vert"
-// import fragmentShader from "./shaders/shader.frag"
-
-import vertexShader from "./shaders/particles.vert"
-import fragmentShader from "./shaders/particles.frag"
+import vertexShader from "./shaders/shader.vert"
+import fragmentShader from "./shaders/shader.frag"
 
 /**
  * Base
@@ -23,35 +20,10 @@ const canvas = document.getElementById("webgl")
 const scene = new THREE.Scene()
 
 /**
- * Meshes and Particles
+ * Mesh
  */
 // Geometry
-// const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
-const geometry = new THREE.BufferGeometry()
-
-/**
- * Buffer geometry attributes
- */
-const segments = 32
-const allSegments = 32 * 32
-
-const positions = new THREE.BufferAttribute(
-  new Float32Array(allSegments * 3),
-  3
-)
-const opacities = new THREE.BufferAttribute(new Float32Array(allSegments), 1)
-
-let index = 0
-for (let i = 0; i < segments; i++) {
-  for (let j = 0; j < segments; j++) {
-    positions.setXYZ(index, i / segments - 0.5, j / segments - 0.5, 0)
-    opacities.setX(index, Math.random())
-    index += 1
-  }
-}
-
-geometry.setAttribute("position", positions)
-geometry.setAttribute("aOpacity", opacities)
+const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 
 // Material
 const material = new THREE.ShaderMaterial({
@@ -68,16 +40,13 @@ const material = new THREE.ShaderMaterial({
 
   uniforms: {
     uTime: { value: 0 },
-    uSize: { value: 10.0 },
   },
 })
 
 gui.add(material, "wireframe")
-gui.add(material.uniforms.uSize, "value").min(1.0).max(50.0).step(1.0)
 
-// Mesh or particles
-// const mesh = new THREE.Mesh(geometry, material)
-const mesh = new THREE.Points(geometry, material)
+// Mesh
+const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
 
 /**
@@ -133,18 +102,6 @@ const clock = new THREE.Clock()
 /**
  * Animation
  */
-
-/**
- * Update buffer attributes
- */
-const updateBufferAttributes = (elapsedTime) => {
-  // const attributeOpacities = geometry.attributes.aOpacity.array
-  // for (let i = 0; i < segments * segments; i++) {
-  // Do something
-  // }
-  // geometry.attributes.aOpacity.needsUpdate = true
-}
-
 const tick = () => {
   // Update controls
   controls.update()
@@ -152,8 +109,6 @@ const tick = () => {
   // Update uniforms
   const elapsedTime = clock.getElapsedTime()
   material.uniforms.uTime.value = elapsedTime
-
-  updateBufferAttributes(elapsedTime)
 
   // Render
   renderer.render(scene, camera)
