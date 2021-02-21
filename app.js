@@ -23,7 +23,7 @@ const canvas = document.getElementById("webgl")
 const scene = new THREE.Scene()
 
 /**
- * Test mesh
+ * Meshes and Particles
  */
 // Geometry
 // const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
@@ -33,24 +33,25 @@ const geometry = new THREE.BufferGeometry()
  * Buffer geometry attributes
  */
 const segments = 32
+const allSegments = 32 * 32
 
-const positions = []
-const opacities = []
+const positions = new THREE.BufferAttribute(
+  new Float32Array(allSegments * 3),
+  3
+)
+const opacities = new THREE.BufferAttribute(new Float32Array(allSegments), 1)
 
+let index = 0
 for (let i = 0; i < segments; i++) {
   for (let j = 0; j < segments; j++) {
-    positions.push(i / segments - 0.5, j / segments - 0.5, 0)
-    opacities.push(Math.random())
+    positions.setXYZ(index, i / segments - 0.5, j / segments - 0.5, 0)
+    opacities.setX(index, Math.random())
+    index += 1
   }
 }
 
-console.log(positions)
-
-const positionsArray = new Float32Array(positions)
-const opacitiesArray = new Float32Array(opacities)
-
-geometry.setAttribute("position", new THREE.BufferAttribute(positionsArray, 3))
-geometry.setAttribute("aOpacity", new THREE.BufferAttribute(opacitiesArray, 1))
+geometry.setAttribute("position", positions)
+geometry.setAttribute("aOpacity", opacities)
 
 // Material
 const material = new THREE.ShaderMaterial({
@@ -148,6 +149,7 @@ const tick = () => {
   // Update controls
   controls.update()
 
+  // Update uniforms
   const elapsedTime = clock.getElapsedTime()
   material.uniforms.uTime.value = elapsedTime
 
