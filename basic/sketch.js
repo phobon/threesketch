@@ -11,7 +11,7 @@ export default class BasicSketch extends Sketch {
   }
 
   addObjects() {
-    this.geometry = new THREE.BoxGeometry(1, 1, 1, 32, 32)
+    this.geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 
     // Material
     this.material = new THREE.ShaderMaterial({
@@ -19,12 +19,13 @@ export default class BasicSketch extends Sketch {
       fragmentShader,
       transparent: true,
       wireframe: false,
+      side: THREE.DoubleSide,
 
       // Particle aesthetics
       depthTest: false,
       depthWrite: false,
 
-      blending: THREE.AdditiveBlending,
+      // blending: THREE.AdditiveBlending,
 
       uniforms: {
         uTime: { value: 0 },

@@ -69,7 +69,7 @@ export default class Sketch {
 
     // Update time
     const elapsedTime = this.clock.getElapsedTime()
-    this.time += elapsedTime
+    this.time = elapsedTime
 
     // Update buffer attributes
     this.updateBufferAttributes(elapsedTime)
